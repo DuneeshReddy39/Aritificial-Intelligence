@@ -1,0 +1,2 @@
+pattern_match(X, [X|_]).
+pattern_match(X, [_|T]) :- pattern_match(X, T).
