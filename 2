@@ -1,0 +1,7 @@
+def solve(q=[], r=0):
+    if r == 8: print(q); return
+    for c in range(8):
+        if all(c != qc and abs(c - qc) != r - i for i, qc in enumerate(q)):
+            solve(q + [c], r + 1)
+
+solve()
