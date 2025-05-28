@@ -1,0 +1,5 @@
+teaches(teacher1, math101).
+teaches(teacher2, phy101).
+
+studies(student1, math101).
+studies(student2, phy101).
