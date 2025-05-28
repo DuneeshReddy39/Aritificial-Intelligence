@@ -1,0 +1,62 @@
+from collections import Counter
+
+def entropy(data):
+    total = len(data)
+    counts = Counter(row[-1] for row in data)
+    import math
+    return -sum((count/total)*math.log2(count/total) for count in counts.values())
+
+def split_data(data, index, value):
+    return [row for row in data if row[index] == value]
+
+def best_attribute(data):
+    base_entropy = entropy(data)
+    best_gain = 0
+    best_attr = -1
+    n_attrs = len(data[0]) -1
+    for i in range(n_attrs):
+        vals = set(row[i] for row in data)
+        new_entropy = 0
+        for v in vals:
+            subset = split_data(data, i, v)
+            new_entropy += len(subset)/len(data)*entropy(subset)
+        gain = base_entropy - new_entropy
+        if gain > best_gain:
+            best_gain = gain
+            best_attr = i
+    return best_attr
+
+def id3(data, attributes):
+    labels = [row[-1] for row in data]
+    if len(set(labels)) == 1:
+        return labels[0]
+    if not attributes:
+        return Counter(labels).most_common(1)[0][0]
+    best_attr = best_attribute(data)
+    tree = {attributes[best_attr]:{}}
+    vals = set(row[best_attr] for row in data)
+    for v in vals:
+        subset = split_data(data, best_attr, v)
+        subtree = id3(subset, attributes[:best_attr]+attributes[best_attr+1:])
+        tree[attributes[best_attr]][v] = subtree
+    return tree
+
+data = [
+    ['Sunny', 'Hot', 'High', 'False', 'No'],
+    ['Sunny', 'Hot', 'High', 'True', 'No'],
+    ['Overcast', 'Hot', 'High', 'False', 'Yes'],
+    ['Rain', 'Mild', 'High', 'False', 'Yes'],
+    ['Rain', 'Cool', 'Normal', 'False', 'Yes'],
+    ['Rain', 'Cool', 'Normal', 'True', 'No'],
+    ['Overcast', 'Cool', 'Normal', 'True', 'Yes'],
+    ['Sunny', 'Mild', 'High', 'False', 'No'],
+    ['Sunny', 'Cool', 'Normal', 'False', 'Yes'],
+    ['Rain', 'Mild', 'Normal', 'False', 'Yes'],
+    ['Sunny', 'Mild', 'Normal', 'True', 'Yes'],
+    ['Overcast', 'Mild', 'High', 'True', 'Yes'],
+    ['Overcast', 'Hot', 'Normal', 'False', 'Yes'],
+    ['Rain', 'Mild', 'High', 'True', 'No']
+]
+attributes = ['Outlook','Temperature','Humidity','Wind']
+tree = id3(data, attributes)
+print(tree)
