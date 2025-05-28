@@ -1,0 +1,34 @@
+def is_safe(coloring, region, color, neighbors):
+    for n in neighbors.get(region, []):
+        if coloring.get(n) == color:
+            return False
+    return True
+
+def map_coloring(regions, colors, neighbors, coloring={}):
+    if len(coloring) == len(regions):
+        return coloring
+    uncolored = [r for r in regions if r not in coloring]
+    region = uncolored[0]
+    for color in colors:
+        if is_safe(coloring, region, color, neighbors):
+            coloring[region] = color
+            result = map_coloring(regions, colors, neighbors, coloring)
+            if result:
+                return result
+            del coloring[region]
+    return None
+
+regions = ['WA','NT','SA','Q','NSW','V','T']
+colors = ['Red','Green','Blue']
+neighbors = {
+    'WA': ['NT','SA'],
+    'NT': ['WA','SA','Q'],
+    'SA': ['WA','NT','Q','NSW','V'],
+    'Q': ['NT','SA','NSW'],
+    'NSW': ['Q','SA','V'],
+    'V': ['SA','NSW'],
+    'T': []
+}
+
+coloring = map_coloring(regions, colors, neighbors)
+print(coloring)
