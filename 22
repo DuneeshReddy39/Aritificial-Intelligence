@@ -1,0 +1,10 @@
+can_fly(eagle).
+can_fly(sparrow).
+cannot_fly(ostrich).
+cannot_fly(penguin).
+
+bird(X) :- can_fly(X); cannot_fly(X).
+
+fly_status(Bird) :-
+    can_fly(Bird), write(Bird), writeln(' can fly.');
+    cannot_fly(Bird), write(Bird), writeln(' cannot fly.').
