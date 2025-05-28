@@ -1,0 +1,8 @@
+fact(sunny).
+fact(cloudy).
+
+goal(wet_grass) :- goal(rain).
+goal(rain) :- fact(cloudy).
+
+prove(X) :- fact(X).
+prove(X) :- goal(X).
