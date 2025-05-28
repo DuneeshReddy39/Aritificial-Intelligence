@@ -1,0 +1,8 @@
+disease(flu).
+symptom(flu, fever).
+symptom(flu, cough).
+
+diagnose(Disease) :-
+    disease(Disease),
+    symptom(Disease, Symptom),
+    write('Has symptom: '), writeln(Symptom).
