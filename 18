@@ -1,0 +1,3 @@
+person(john, '1990-01-01').
+person(mary, '1985-07-12').
+person(alex, '1992-05-23').
