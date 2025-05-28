@@ -1,0 +1,10 @@
+def dfs(graph, start, visited=None):
+    if visited is None: visited = set()
+    visited.add(start)
+    print(start)
+    for nxt in graph[start]:
+        if nxt not in visited:
+            dfs(graph, nxt, visited)
+
+graph = {'A': ['B','C'], 'B': ['D','E'], 'C': ['F'], 'D': [], 'E': ['F'], 'F': []}
+dfs(graph, 'A')
