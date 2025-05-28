@@ -1,0 +1,6 @@
+fact(sunny).
+rule(wet_grass) :- fact(rain).
+rule(rain) :- fact(cloudy).
+
+infer(Fact) :- fact(Fact).
+infer(Fact) :- rule(Fact).
