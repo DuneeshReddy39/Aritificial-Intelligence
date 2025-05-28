@@ -1,0 +1,31 @@
+import heapq
+
+goal = [[1,2,3],[4,5,6],[7,8,0]]
+moves = [(-1,0),(1,0),(0,-1),(0,1)]
+
+def manhattan(p): return sum(abs(i//3 - p[i]//3) + abs(i%3 - p[i]%3) for i in range(9) if p[i])
+def neighbors(p):
+    i = p.index(0); x,y = i//3, i%3
+    for dx,dy in moves:
+        nx,ny = x+dx,y+dy
+        if 0<=nx<3 and 0<=ny<3:
+            np = p[:]; ni = nx*3+ny
+            np[i], np[ni] = np[ni], np[i]
+            yield np
+
+def astar(start):
+    start = sum(start, [])
+    heap = [(manhattan(start), 0, start, [])]
+    seen = set()
+    while heap:
+        f, g, p, path = heapq.heappop(heap)
+        if p == sum(goal, []): return path + [p]
+        t = tuple(p)
+        if t in seen: continue
+        seen.add(t)
+        for n in neighbors(p):
+            heapq.heappush(heap, (g+1+manhattan(n), g+1, n, path + [p]))
+
+start_board = [[1, 2, 3], [4, 0, 6], [7, 5, 8]]
+solution = astar(start_board)
+for step in solution: print(f"{step[0:3]}\n{step[3:6]}\n{step[6:]}\n")
