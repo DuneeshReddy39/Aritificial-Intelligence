@@ -1,0 +1,39 @@
+def minimax(board, player):
+    if check_win(board, 'X'): return 1
+    if check_win(board, 'O'): return -1
+    if all(board[r][c] != ' ' for r in range(3) for c in range(3)): return 0
+
+    if player == 'X':
+        best = -float('inf')
+        for r in range(3):
+            for c in range(3):
+                if board[r][c] == ' ':
+                    board[r][c] = player
+                    val = minimax(board, 'O')
+                    board[r][c] = ' '
+                    best = max(best, val)
+        return best
+    else:
+        best = float('inf')
+        for r in range(3):
+            for c in range(3):
+                if board[r][c] == ' ':
+                    board[r][c] = player
+                    val = minimax(board, 'X')
+                    board[r][c] = ' '
+                    best = min(best, val)
+        return best
+
+def best_move(board):
+    best_val = -float('inf')
+    move = None
+    for r in range(3):
+        for c in range(3):
+            if board[r][c] == ' ':
+                board[r][c] = 'X'
+                val = minimax(board, 'O')
+                board[r][c] = ' '
+                if val > best_val:
+                    best_val = val
+                    move = (r,c)
+    return move
