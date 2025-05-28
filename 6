@@ -1,0 +1,16 @@
+def vacuum_cleaner(start_state):
+    state = start_state
+    actions = []
+    while 'Dirty' in state.values():
+        if state['A'] == 'Dirty':
+            actions.append('Suck A')
+            state['A'] = 'Clean'
+        elif state['B'] == 'Dirty':
+            actions.append('Right')
+            state['B'] = 'Clean'
+        else:
+            break
+    return actions
+
+start = {'A': 'Dirty', 'B': 'Dirty'}
+print(vacuum_cleaner(start))
