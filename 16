@@ -1,0 +1,37 @@
+import math
+def sigmoid(x):
+    return 1/(1+math.exp(-x))
+def sigmoid_deriv(x):
+    return x*(1-x)
+
+inputs = [[0,0],[0,1],[1,0],[1,1]]
+outputs = [0,1,1,0]
+
+weights1 = [[0.5, -0.2],[0.3,0.8]]
+weights2 = [0.7, -1.1]
+
+lr = 0.5
+
+for epoch in range(10000):
+    for x, y in zip(inputs, outputs):
+        # Forward pass
+        hidden = [sigmoid(x[0]*weights1[0][0] + x[1]*weights1[1][0]),
+                  sigmoid(x[0]*weights1[0][1] + x[1]*weights1[1][1])]
+        output = sigmoid(hidden[0]*weights2[0] + hidden[1]*weights2[1])
+        # Error
+        error = y - output
+        # Backpropagation
+        d_output = error * sigmoid_deriv(output)
+        d_hidden = [d_output*weights2[0]*sigmoid_deriv(hidden[0]),
+                    d_output*weights2[1]*sigmoid_deriv(hidden[1])]
+        # Update weights
+        weights2[0] += lr * d_output * hidden[0]
+        weights2[1] += lr * d_output * hidden[1]
+        weights1[0][0] += lr * d_hidden[0] * x[0]
+        weights1[1][0] += lr * d_hidden[0] * x[1]
+        weights1[0][1] += lr * d_hidden[1] * x[0]
+        weights1[1][1] += lr * d_hidden[1] * x[1]
+
+print("Trained weights:")
+print(weights1)
+print(weights2)
