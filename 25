@@ -1,0 +1,9 @@
+% States: monkey at position, banana at position, have_banana
+% Positions: left, right
+
+move(state(monkey_pos, banana_pos, have), state(new_monkey_pos, banana_pos, have)) :-
+    (monkey_pos = left -> new_monkey_pos = right ; new_monkey_pos = left),
+    have = no.
+
+move(state(monkey_pos, banana_pos, no), state(monkey_pos, banana_pos, yes)) :-
+    monkey_pos = banana_pos.
