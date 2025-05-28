@@ -1,0 +1,49 @@
+from collections import deque
+
+def is_valid(state):
+    M1, C1, B, M2, C2 = state
+    if M1 < 0 or C1 < 0 or M2 < 0 or C2 < 0 or B not in [0,1]:
+        return False
+    if M1 > 0 and M1 < C1:
+        return False
+    if M2 > 0 and M2 < C2:
+        return False
+    return True
+
+def get_neighbors(state):
+    M1, C1, B, M2, C2 = state
+    moves = [(1,0),(2,0),(0,1),(0,2),(1,1)]
+    neighbors = []
+    if B == 1:
+        for m,c in moves:
+            new_state = (M1 - m, C1 - c, 0, M2 + m, C2 + c)
+            if is_valid(new_state):
+                neighbors.append(new_state)
+    else:
+        for m,c in moves:
+            new_state = (M1 + m, C1 + c, 1, M2 - m, C2 - c)
+            if is_valid(new_state):
+                neighbors.append(new_state)
+    return neighbors
+
+def missionaries_cannibals():
+    start = (3,3,1,0,0)
+    goal = (0,0,0,3,3)
+    queue = deque([(start, [start])])
+    visited = set([start])
+    while queue:
+        state, path = queue.popleft()
+        if state == goal:
+            return path
+        for n in get_neighbors(state):
+            if n not in visited:
+                visited.add(n)
+                queue.append((n, path+[n]))
+    return None
+
+path = missionaries_cannibals()
+if path:
+    for step in path:
+        print(step)
+else:
+    print("No solution.")
